@@ -33,7 +33,7 @@ class Griit {
         console.log(fileHash);
         const newFileHashedObjectPath = path.join(this.objectsPath, fileHash);  // .griit/objects/HashedFile
         await fs.writeFile(newFileHashedObjectPath, filedata);
-        // TODO: One step Missing here: Add the file to the Staging area
+        await this.updateStagingArea(fileToBeAdded, fileHash);
         console.log(`Added ${fileToBeAdded}`);
     }
 
