@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs/promises';
 import crypto from 'crypto';
+import { timeStamp } from 'console';
 class Griit {
 
     constructor (repoPath = '.') {
@@ -42,7 +43,37 @@ class Griit {
         index.push({ path: filePath, hash: fileHash }); // Add the file to the index
         await fs.writeFile(this.indexPath, JSON.stringify(index)); // Write the updated index back to the file
     }
+
+    async commit (message) {
+        const index = JSON.parse(await fs.readFile(this.indexPath, { encoding: 'utf-8' }));
+        const parentCommit = await this.getCurrentHead();
+
+        const commitData = {
+            timeStamp: new Data().toISOString(),
+            message,
+            files: index,
+            parent: parentCommit
+        };
+
+        const commitHash = this.hashObject(JSON.stringify(commitData));
+        commitPath = path.join(this.objectsPath, commitHash);
+        await fs.writeFile(commitPath, JSON.stringify(commitData));
+        await fs.writeFile(this.headPath, commitHash);  // Update the HEAD to point to the new commit
+        await fs.writeFile(this.indexPath, JSON.stringify([])); // Clear the index after commit /staging area
+        console.log(`Successfully Committed: ${commitHash}`);
+    }
+
+    async getCurrentHead() {
+        try{
+            return await fs.readFile(this.headPath, { encoding: 'utf-8' });
+        } catch(error) {
+
+        }
+    }
+
 }
 
 const griit = new Griit();
 griit.add('sample.txt');
+
+
