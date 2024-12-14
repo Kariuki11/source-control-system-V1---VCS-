@@ -1,6 +1,6 @@
 # Griit - A Basic Version Control System
 
-Griit is a simple, custom version control system written in Node.js. It replicates some basic functionalities of Git, such as initializing a repository, staging files, and committing changes. This project is still under development, and the current implementation focuses on foundational features.
+Griit is a simple, custom version control system. It replicates some basic functionalities of Git, such as initializing a repository, staging files, and committing changes. This project is still under development, and the current implementation focuses on foundational features.
 
 ---
 
