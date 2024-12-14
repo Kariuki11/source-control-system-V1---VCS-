@@ -44,25 +44,49 @@ class Griit {
         await fs.writeFile(this.indexPath, JSON.stringify(index)); // Write the updated index back to the file
     }
 
-    async commit (message) {
+    // async commit (message) {
+    //     const index = JSON.parse(await fs.readFile(this.indexPath, { encoding: 'utf-8' }));
+    //     const parentCommit = await this.getCurrentHead();
+
+    //     const commitData = {
+    //         timeStamp: new Data().toISOString(),
+    //         message,
+    //         files: index,
+    //         parent: parentCommit
+    //     };
+
+    //     const commitHash = this.hashObject(JSON.stringify(commitData));
+    //     commitPath = path.join(this.objectsPath, commitHash);
+    //     await fs.writeFile(commitPath, JSON.stringify(commitData));
+    //     await fs.writeFile(this.headPath, commitHash);  // Update the HEAD to point to the new commit
+    //     await fs.writeFile(this.indexPath, JSON.stringify([])); // Clear the index after commit /staging area
+    //     console.log(`Successfully Committed: ${commitHash}`);
+    // }
+
+    async commit(message) {
         const index = JSON.parse(await fs.readFile(this.indexPath, { encoding: 'utf-8' }));
         const parentCommit = await this.getCurrentHead();
-
-        const commitData = {
-            timeStamp: new Data().toISOString(),
-            message,
-            files: index,
-            parent: parentCommit
-        };
-
+    
+        // Create separate files for message and timestamp
+        const timestamp = new Date().toISOString();
+        const commitMessagePath = path.join(this.objectsPath, 'commit_message');
+        const commitTimestampPath = path.join(this.objectsPath, 'commit_timestamp');
+    
+        // Write message and timestamp files
+        await fs.writeFile(commitMessagePath, message);
+        await fs.writeFile(commitTimestampPath, timestamp);
+    
+        // Create a commit object to get the hash
+        const commitData = { timestamp, message, files: index, parent: parentCommit };
         const commitHash = this.hashObject(JSON.stringify(commitData));
-        commitPath = path.join(this.objectsPath, commitHash);
-        await fs.writeFile(commitPath, JSON.stringify(commitData));
-        await fs.writeFile(this.headPath, commitHash);  // Update the HEAD to point to the new commit
-        await fs.writeFile(this.indexPath, JSON.stringify([])); // Clear the index after commit /staging area
+    
+        // Update HEAD and index
+        await fs.writeFile(this.headPath, commitHash);  // Store the commit hash in HEAD
+        await fs.writeFile(this.indexPath, JSON.stringify([])); // Clear the index (staging area)
+    
         console.log(`Successfully Committed: ${commitHash}`);
     }
-
+    
     async getCurrentHead() {
         try{
             return await fs.readFile(this.headPath, { encoding: 'utf-8' });
