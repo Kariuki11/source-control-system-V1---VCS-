@@ -119,4 +119,6 @@ Expected Outputs:
 ---
 
 ## Author
-This project is created by [@Kariuki11](
+This project is created by:
+        #Kariuki11
+        'kariukikennnedy288@gmail.com'
