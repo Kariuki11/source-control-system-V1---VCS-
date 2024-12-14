@@ -67,7 +67,7 @@ class Griit {
         try{
             return await fs.readFile(this.headPath, { encoding: 'utf-8' });
         } catch(error) {
-
+            return null;
         }
     }
 
@@ -75,5 +75,6 @@ class Griit {
 
 const griit = new Griit();
 griit.add('sample.txt');
+griit.commit('Initial Commit');
 
 
