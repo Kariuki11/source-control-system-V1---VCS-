@@ -73,8 +73,12 @@ class Griit {
 
 }
 
-const griit = new Griit();
-griit.add('sample.txt');
-griit.commit('Initial Commit');
+(async () => {
+    const griit = new Griit();
+    await griit.add('sample.txt');
+    await griit.commit('Initial Commit');
+})();
+
+
 
 
